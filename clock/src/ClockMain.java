@@ -7,6 +7,8 @@ import java.time.LocalTime;
 import java.util.concurrent.Semaphore;
 
 public class ClockMain {
+	
+	// Trådar - Generella tiden, 
 
     public static void main(String[] args) throws InterruptedException {
         AlarmClockEmulator emulator = new AlarmClockEmulator();
