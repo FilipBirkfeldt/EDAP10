@@ -3,6 +3,7 @@ import clock.io.ClockInput;
 import clock.io.ClockInput.UserInput;
 import clock.io.ClockOutput;
 import clock.io.MonitorThreadHandler;
+import clock.io.TimeThread;
 
 import java.time.LocalTime; 
 import java.util.concurrent.Semaphore;
@@ -29,13 +30,14 @@ public class ClockMain {
         
         
         // Tråd för att låta tiden rulla 
-        MonitorThreadHandler disp_time = new MonitorThreadHandler(out);
-        disp_time.displayTime(); 
+        MonitorThreadHandler thread_handler = new MonitorThreadHandler(out, currentTime);
+        thread_handler.setTime(currentTime);
+        TimeThread timethread = new TimeThread(out, thread_handler); 
+        timethread.start(); 
         
         
         
-        
-        out.displayTime(15, 2, 37);   // arbitrary time: just an example
+        // out.displayTime(15, 2, 37);   // arbitrary time: just an example
 
         
         // Del I1

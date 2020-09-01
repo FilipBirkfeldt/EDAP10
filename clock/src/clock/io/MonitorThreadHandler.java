@@ -3,7 +3,7 @@ package clock.io;
 import java.util.concurrent.Semaphore; 
 
 
-public class MonitorThreadHandler extends Thread {
+public class MonitorThreadHandler {
 	
 	private ClockOutput clockOutput; 
 	private Semaphore mutex = new Semaphore(1); //Mutex - lås race condition kapplöpning
@@ -13,12 +13,18 @@ public class MonitorThreadHandler extends Thread {
 
 
 	
-	public MonitorThreadHandler(ClockOutput clockOutput) {
+	public MonitorThreadHandler(ClockOutput clockOutput, int time) {
 		this.clockOutput = clockOutput; 
+		this.alarmTime = time; 
 	}
 	
-	public void setTime(int h, int m, int s) {
+	public void setTime(int hms) {
+		this.time = time; 
 		
+	}
+	
+	public int getTime() {
+		return time; 
 	}
 	
 	
