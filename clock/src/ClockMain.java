@@ -8,19 +8,22 @@ import java.util.concurrent.Semaphore;
 
 public class ClockMain {
 	
-	// Trådar - Generella tiden, 
-
+	// 1.  Trådar - Generell_TidsTråd, AlarmTråd
+	// 2.  
+	
     public static void main(String[] args) throws InterruptedException {
-        AlarmClockEmulator emulator = new AlarmClockEmulator();
-
+        
+    	// Emulator - GUI 
+    	AlarmClockEmulator emulator = new AlarmClockEmulator();
         ClockInput  in  = emulator.getInput();
         ClockOutput out = emulator.getOutput();
+        
         LocalTime now = java.time.LocalTime.now(); 
         int currentTime = (now.getHour()*10000 + now.getMinute()*100+now.getSecond()); 
         
         
         // Tråd för att låta tiden rulla 
-        TimeThread = timeThread = new TimeThread(clockMinitor, out); 
+        Thread timeThread = new Thread(Monitor, out); 
         
         
         
