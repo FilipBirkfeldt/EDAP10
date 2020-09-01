@@ -3,6 +3,7 @@ import clock.io.ClockInput;
 import clock.io.ClockInput.UserInput;
 import clock.io.ClockOutput;
 import clock.io.MonitorThreadHandler;
+import clock.io.TimeThread;
 
 import java.time.LocalTime; 
 import java.util.concurrent.Semaphore;
@@ -24,18 +25,20 @@ public class ClockMain {
         ClockInput  in  = emulator.getInput();
         ClockOutput out = emulator.getOutput();
         
-        LocalTime now = java.time.LocalTime.now(); 
-        int currentTime = (now.getHour()*10000 + now.getMinute()*100+now.getSecond()); 
         
         
         // Tråd för att låta tiden rulla 
         MonitorThreadHandler disp_time = new MonitorThreadHandler(out);
-        disp_time.displayTime(); 
+        TimeThread t1 = new TimeThread(disp_time);
+        t1.start();
+        
+        
+       
         
         
         
         
-        out.displayTime(15, 2, 37);   // arbitrary time: just an example
+        //out.displayTime(15, 2, 37);   // arbitrary time: just an example
 
         
         // Del I1

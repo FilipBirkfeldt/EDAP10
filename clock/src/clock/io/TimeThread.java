@@ -4,19 +4,24 @@ import java.util.concurrent.Semaphore;
 
 public class TimeThread extends Thread{
 	
-	private ClockOutput clockOutput; 
-	private MonitorThreadHandler monThread; 
+	private MonitorThreadHandler disp_time;
 	
-	public TimeThread(ClockOutput clockOutput, MonitorThreadHandler monThread) {
-		this.clockOutput = clockOutput; 
-		this.monThread = monThread; 
+	public TimeThread(MonitorThreadHandler disp_time) {
+		this.disp_time = disp_time;
 	}
 	
+	@Override
 	public void run() {
-		
-		while(true) {
-			clockOutput.
+		try { 
+			while(true) {
+			disp_time.setTime(disp_time.getTime()+1);
+			
+				Thread.sleep(1000);
+			}
+		}catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-	}
 
 }
