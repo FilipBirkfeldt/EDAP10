@@ -17,7 +17,8 @@ public class ClockMain {
         int currentTime = (now.getHour()*10000 + now.getMinute()*100+now.getSecond()); 
         
         
-        
+        // Tråd för att låta tiden rulla 
+        TimeThread = timeThread = new TimeThread(clockMinitor, out); 
         
         
         
