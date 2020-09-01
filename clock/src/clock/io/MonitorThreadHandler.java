@@ -17,13 +17,11 @@ public class MonitorThreadHandler extends Thread {
 		this.clockOutput = clockOutput; 
 	}
 	
-	private int retrieveTime() {
-		return time; 
-	}
-	
-	public void run() {
+	public void setTime(int h, int m, int s) {
 		
 	}
+	
+	
 	
 	
 	

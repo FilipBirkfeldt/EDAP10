@@ -30,7 +30,7 @@ public class ClockMain {
         
         // Tråd för att låta tiden rulla 
         MonitorThreadHandler disp_time = new MonitorThreadHandler(out);
-        out.displayTime(currentTime, currentTime, currentTime);
+        disp_time.displayTime(); 
         
         
         
