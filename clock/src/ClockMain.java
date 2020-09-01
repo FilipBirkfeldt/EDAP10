@@ -27,7 +27,7 @@ public class ClockMain {
         
         LocalTime now = java.time.LocalTime.now(); 
         int currentTime = (now.getHour()*10000 + now.getMinute()*100+now.getSecond()); 
-        
+        System.out.print(currentTime);
         
         // Tråd för att låta tiden rulla 
         MonitorThreadHandler thread_handler = new MonitorThreadHandler(out, currentTime);

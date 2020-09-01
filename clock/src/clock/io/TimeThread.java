@@ -12,17 +12,21 @@ public class TimeThread extends Thread{
 		this.monThread = monThread; 
 	}
 	
+	@Override
 	public void run() {
 		
 			long t0 = System.currentTimeMillis();
+	
+			
 			
 		while(true) {
 			long now = System.currentTimeMillis(); 
 			int time = monThread.getTime(); 
+			System.out.print(time); 
 			int h = (time/10000)%24; 
 			int m = (time/100)-(h*100)*60; 
 			int s = (((time) - (h * 10000) - (m * 100)) % 60) + 1; 
-			
+		
 			if (s > 59) {
 				s = 0;
 				m++;
@@ -37,7 +41,7 @@ public class TimeThread extends Thread{
 			}
 			
 			monThread.setTime(h*10000+m*100+s);
-			clockOutput.displayTime(h, m, s); 
+			clockOutput.displayTime(h, m,s); 
 			
 			try {
 				Thread.sleep(1000 - (now - t0) % 1000);

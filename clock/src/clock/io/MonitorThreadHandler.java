@@ -14,8 +14,14 @@ public class MonitorThreadHandler {
 
 	
 	public MonitorThreadHandler(ClockOutput clockOutput, int time) {
-		this.clockOutput = clockOutput; 
-		this.alarmTime = time; 
+		try {
+			mutex.acquire();
+			this.clockOutput = clockOutput; 
+			this.alarmTime = time;
+			mutex.release();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void setTime(int hms) {
