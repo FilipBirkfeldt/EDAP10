@@ -1,43 +1,35 @@
 package clock.io;
 
-import java.util.concurrent.Semaphore; 
-
+import java.util.concurrent.Semaphore;
 
 public class MonitorThreadHandler extends Thread {
-	
-	private Semaphore mutex = new Semaphore(1); //Mutex - lås race condition kapplöpning
-	private int time; 
-	private int alarmTime = 0; 
-	private boolean alarm = false; 
+
+	private Semaphore mutex = new Semaphore(1); // Mutex - lås race condition
+												// kapplöpning
+	private int time;
+	private int alarmTime;
+	private boolean alarm;
 	private ClockOutput out;
 
-
-	
 	public MonitorThreadHandler(ClockOutput out) {
-		this.out=out;
+		this.out = out;
 		time = 0;
-		
+		alarm = false;
+
 	}
-	
+
 	public void setTime(int h, int m, int s) {
-		time = h*100000+m*1000+s;
+		mutex.tryAcquire();
+		time = h * 10000 + m * 100 + s;
+		out.displayTime(h, m, s);
 	}
 	
-	public void setTime(int time) {
-		this.time = time;
-		out.displayTime(0, 0, time);
+	public void setAlarmTime(int h, int m, int s){
 		
 	}
-	
-	public int getTime(){
+
+	public int getTime() {
 		return time;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

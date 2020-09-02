@@ -8,7 +8,7 @@ public interface ClockOutput {
     void displayTime(int hours, int mins, int secs);
 
     /** Indicate on the display whether the alarm is on or off. */
-    void setAlarmIndicator(boolean on);
+	void setAlarmIndicator(boolean on);
 
     /** Signal the alarm. (In the emulator, only a visual alarm is given.) */
     void alarm();
