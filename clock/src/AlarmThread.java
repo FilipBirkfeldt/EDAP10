@@ -1,3 +1,5 @@
+import java.util.concurrent.Semaphore;
+
 import clock.io.ClockInput;
 import clock.io.ClockOutput;
 import clock.io.MonitorThreadHandler;
@@ -11,6 +13,7 @@ public class AlarmThread extends Thread {
 	private int s;
 	private int alarmTime; 
 	private ClockOutput out; 
+	private Semaphore mutex = new Semaphore(1); 
 
 	public AlarmThread(MonitorThreadHandler disp_time, ClockInput in, ClockOutput out) {
 		this.disp_time = disp_time;
@@ -23,13 +26,14 @@ public class AlarmThread extends Thread {
 		try {
 			while (true) {
 				
+				mutex.acquire();
 				if (disp_time.getAlarmTime() == disp_time.getTime()) {
 					disp_time.alarmOn(true);
 					
 				}
 
 				//disp_time.setTime(h, m, s);
-				Thread.sleep(1000);
+				mutex.release(); 
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
