@@ -9,10 +9,13 @@ public class AlarmThread extends Thread {
 	private int h;
 	private int m;
 	private int s;
+	private int alarmTime; 
+	private ClockOutput out; 
 
-	public AlarmThread(MonitorThreadHandler disp_time, ClockInput in) {
+	public AlarmThread(MonitorThreadHandler disp_time, ClockInput in, ClockOutput out) {
 		this.disp_time = disp_time;
 		this.in = in;
+		this.out = out; 
 	}
 
 	@Override
@@ -20,7 +23,10 @@ public class AlarmThread extends Thread {
 		try {
 			while (true) {
 				
-				
+				if (disp_time.getAlarmTime() == disp_time.getTime()) {
+					disp_time.alarmOn(true);
+					
+				}
 
 				//disp_time.setTime(h, m, s);
 				Thread.sleep(1000);

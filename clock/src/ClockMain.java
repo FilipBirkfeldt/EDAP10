@@ -29,9 +29,12 @@ public class ClockMain {
 		// Tråd för att låta tiden rulla
 		MonitorThreadHandler disp_time = new MonitorThreadHandler(out);
 		TimeThread t1 = new TimeThread(disp_time, out);
-		AlarmThread t2 = new AlarmThread(disp_time, in);
+		AlarmThread t2 = new AlarmThread(disp_time, in, out);
 		t1.start();
 		t2.start();
+		
+		// 
+		
 
 		// out.displayTime(15, 2, 37); // arbitrary time: just an example
 
