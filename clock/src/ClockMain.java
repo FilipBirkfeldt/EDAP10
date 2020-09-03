@@ -52,9 +52,11 @@ public class ClockMain {
 			int s = userInput.getSeconds();
 			if (choice == 1) {
 				disp_time.setTime(h, m, s);
+				disp_time.alarmOn(false);
 			}
 			if (choice == 2) {
 				disp_time.setAlarmTime(h, m, s);
+				disp_time.alarmOn(false);
 			}
 			if (choice == 3) {
 				alarm = !alarm;

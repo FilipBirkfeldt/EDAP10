@@ -14,6 +14,7 @@ public class AlarmThread extends Thread {
 	private int alarmTime; 
 	private ClockOutput out; 
 	private Semaphore mutex = new Semaphore(1); 
+	private boolean alarm;
 
 	public AlarmThread(MonitorThreadHandler disp_time, ClockInput in, ClockOutput out) {
 		this.disp_time = disp_time;
@@ -27,9 +28,13 @@ public class AlarmThread extends Thread {
 			while (true) {
 				
 				mutex.acquire();
+				
 				if (disp_time.getAlarmTime() == disp_time.getTime()) {
-					disp_time.alarmOn(true);
-					
+					alarm = true;
+					disp_time.alarmOn(alarm);
+				}
+				if (disp_time.getAlarmTime()+20 == disp_time.getTime() && alarm == true) {
+					disp_time.alarmOn(false);
 				}
 
 				//disp_time.setTime(h, m, s);

@@ -28,9 +28,9 @@ public class MonitorThreadHandler extends Thread {
 			if (alarm == true) {
 				out.alarm();
 				alarm_time = alarm_time - 1;
-				if (alarm_time == 0) {
-					alarmOn(false);
-				}
+				//if (alarm_time == 0) {
+				//	alarmOn(false);
+				//}
 			}
 
 			return;
@@ -65,7 +65,7 @@ public class MonitorThreadHandler extends Thread {
 	public void alarmOn(boolean alarm) {
 		try {
 			mutex.acquire();
-			alarm_time = 20;
+			//alarm_time = 20;
 			this.alarm = alarm;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
