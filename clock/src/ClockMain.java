@@ -32,9 +32,8 @@ public class ClockMain {
 		AlarmThread t2 = new AlarmThread(disp_time, in, out);
 		t1.start();
 		t2.start();
-		
-		// 
-		
+
+		//
 
 		// out.displayTime(15, 2, 37); // arbitrary time: just an example
 
@@ -44,24 +43,26 @@ public class ClockMain {
 
 		while (true) {
 			// vänta på user-input
+			
 			sem.acquire();
 			UserInput userInput = in.getUserInput();
 			int choice = userInput.getChoice();
+
 			int h = userInput.getHours();
 			int m = userInput.getMinutes();
 			int s = userInput.getSeconds();
+
 			if (choice == 1) {
 				disp_time.setTime(h, m, s);
-				disp_time.alarmOn(false);
 			}
 			if (choice == 2) {
 				disp_time.setAlarmTime(h, m, s);
-				disp_time.alarmOn(false);
+
 			}
 			if (choice == 3) {
 				alarm = !alarm;
 				out.setAlarmIndicator(alarm);
-
+				disp_time.alarmOn(false);
 			}
 
 			System.out.println("choice=" + choice + " h=" + h + " m=" + m + " s=" + s);

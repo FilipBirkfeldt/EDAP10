@@ -19,7 +19,7 @@ public class TimeThread extends Thread {
 	public void run() {
 		try {
 			while (true) {
-				mutex.acquire();
+				//mutex.acquire();
 				long filipsTid1 = System.currentTimeMillis();
 				int time = disp_time.getTime();
 				int h = (time / 10000) % 24;
@@ -42,7 +42,7 @@ public class TimeThread extends Thread {
 				
 				long Filipstid2 = System.currentTimeMillis();
 				Thread.sleep(997- (Filipstid2-filipsTid1));
-				mutex.release();
+				//mutex.release();
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

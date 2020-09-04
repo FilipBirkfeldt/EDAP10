@@ -66,6 +66,7 @@ public class MonitorThreadHandler extends Thread {
 		try {
 			mutex.acquire();
 			//alarm_time = 20;
+			System.out.println(alarm);
 			this.alarm = alarm;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
