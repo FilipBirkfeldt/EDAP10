@@ -28,8 +28,9 @@ public class ClockMain {
 
 		// Tråd för att låta tiden rulla
 		MonitorThreadHandler disp_time = new MonitorThreadHandler(out);
-		TimeThread t1 = new TimeThread(disp_time, out);
-		AlarmThread t2 = new AlarmThread(disp_time, in, out);
+		Semaphore sem1 = new Semaphore(0);
+		TimeThread t1 = new TimeThread(disp_time, out, sem1);
+		AlarmThread t2 = new AlarmThread(disp_time, in, out, sem1);
 		t1.start();
 		t2.start();
 

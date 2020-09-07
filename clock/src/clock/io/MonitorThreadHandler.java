@@ -27,7 +27,7 @@ public class MonitorThreadHandler extends Thread {
 
 			if (alarm == true) {
 				out.alarm();
-				alarm_time = alarm_time - 1;
+				// alarm_time = alarm_time - 1;
 				//if (alarm_time == 0) {
 				//	alarmOn(false);
 				//}
@@ -53,20 +53,30 @@ public class MonitorThreadHandler extends Thread {
 		}
 	}
 
-	public int getAlarmTime() {
-		return alarmTime;
-
+	public int getAlarmTime() throws InterruptedException {
+		try{
+			mutex.acquire();
+			return alarmTime;
+		} finally{
+			mutex.release();
+		}
 	}
 
-	public int getTime() {
-		return time;
+	public int getTime() throws InterruptedException {
+		try{
+			mutex.acquire();
+			return time;
+		} finally{
+			mutex.release();
+		}
+		
 	}
 
 	public void alarmOn(boolean alarm) {
 		try {
 			mutex.acquire();
 			//alarm_time = 20;
-			System.out.println(alarm);
+			System.out.println(alarm + " denna");
 			this.alarm = alarm;
 		} catch (InterruptedException e) {
 			e.printStackTrace();

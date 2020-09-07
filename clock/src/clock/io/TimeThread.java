@@ -8,18 +8,18 @@ public class TimeThread extends Thread {
 
 	private MonitorThreadHandler disp_time;
 	private ClockOutput out;
-	private Semaphore mutex = new Semaphore(1); 
+	private Semaphore sem1;
 
-	public TimeThread(MonitorThreadHandler disp_time, ClockOutput out) {
+	public TimeThread(MonitorThreadHandler disp_time, ClockOutput out, Semaphore sem1) {
 		this.disp_time = disp_time;
 		this.out = out;
+		this.sem1 = sem1;
 	}
 
 	@Override
 	public void run() {
 		try {
 			while (true) {
-				//mutex.acquire();
 				long filipsTid1 = System.currentTimeMillis();
 				int time = disp_time.getTime();
 				int h = (time / 10000) % 24;
@@ -42,7 +42,8 @@ public class TimeThread extends Thread {
 				
 				long Filipstid2 = System.currentTimeMillis();
 				Thread.sleep(997- (Filipstid2-filipsTid1));
-				//mutex.release();
+				// från quiz  (1000-(now-t0)%1000)
+				sem1.release();
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

@@ -13,22 +13,22 @@ public class AlarmThread extends Thread {
 	private int s;
 	private int alarmTime; 
 	private ClockOutput out; 
-	private Semaphore mutex = new Semaphore(1); 
+	private Semaphore sem1;
 	private boolean alarm;
 
-	public AlarmThread(MonitorThreadHandler disp_time, ClockInput in, ClockOutput out) {
+	public AlarmThread(MonitorThreadHandler disp_time, ClockInput in, ClockOutput out, Semaphore sem1) {
 		this.disp_time = disp_time;
 		this.in = in;
 		this.out = out; 
+		this.sem1 = sem1;
 	}
 
 	@Override
 	public void run() {
 		try {
 			while (true) {
-				
-				mutex.acquire();
-				
+				sem1.acquire();
+				System.out.println("test");
 				if (disp_time.getAlarmTime() == disp_time.getTime()) {
 					alarm = true;
 					disp_time.alarmOn(alarm);
@@ -38,7 +38,6 @@ public class AlarmThread extends Thread {
 				}
 
 				//disp_time.setTime(h, m, s);
-				mutex.release(); 
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
