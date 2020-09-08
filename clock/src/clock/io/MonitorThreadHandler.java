@@ -4,13 +4,15 @@ import java.util.concurrent.Semaphore;
 
 public class MonitorThreadHandler {
 
-	private Semaphore mutex = new Semaphore(1); // Mutex - lås race condition //									// kapplöpning
+	private Semaphore mutex = new Semaphore(1); // Mutex - lås race condition //
+												// // kapplöpning
 	private int time;
 	private int alarmTime;
 	private int alarmTimeStop;
 	private boolean alarm;
 	private ClockOutput out;
 	private int alarm_time;
+	private boolean alarmOn = false;
 
 	public MonitorThreadHandler(ClockOutput out) {
 		this.out = out;
@@ -24,17 +26,12 @@ public class MonitorThreadHandler {
 			mutex.acquire();
 			time = h * 10000 + m * 100 + s;
 			out.displayTime(h, m, s);
-			
-			
-			if (alarm == true) {
-				if(alarmTimeStop==time){
-					alarm=false;
+
+			if (alarmOn == true) {
+				if (alarmTimeStop == time) {
+					alarmOn = false;
 				}
 				out.alarm();
-				// alarm_time = alarm_time - 1;
-				// if (alarm_time == 0) {
-				// alarmOn(false);
-				// }
 			}
 
 			return;
@@ -42,7 +39,6 @@ public class MonitorThreadHandler {
 			e.printStackTrace();
 		} finally {
 			mutex.release();
-
 		}
 	}
 
@@ -50,7 +46,7 @@ public class MonitorThreadHandler {
 		try {
 			mutex.acquire();
 			alarmTime = h * 10000 + m * 100 + s;
-			alarmTimeStop = alarmTime +20;
+			alarmTimeStop = alarmTime + 20;
 			return;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -75,7 +71,6 @@ public class MonitorThreadHandler {
 				m = 0;
 				h++;
 			}
-
 			if (h > 23) {
 				h = 0;
 			}
@@ -85,45 +80,29 @@ public class MonitorThreadHandler {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
 	}
 
 	public void checkAlarm() {
 		try {
 			mutex.release();
-			if (alarmTime == time) {
-				alarmOn(true);
+			if (alarm==true && alarmTime == time) {
+				alarmOn = true;
 			}
+			return;
 		} finally {
 			mutex.release();
 		}
-	}
-
-	public int getAlarmTime() throws InterruptedException {
-		try {
-			mutex.acquire();
-			return alarmTime;
-		} finally {
-			mutex.release();
-		}
-	}
-
-	public int getTime() throws InterruptedException {
-		try {
-			mutex.acquire();
-			return time;
-		} finally {
-			mutex.release();
-		}
-
 	}
 
 	public void alarmOn(boolean alarm) {
 		try {
 			mutex.acquire();
-			// alarm_time = 20;
-			System.out.println(alarm + " denna");
 			this.alarm = alarm;
+			if (alarmOn){
+				alarmOn = false;
+			}
+			return;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
