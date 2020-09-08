@@ -28,14 +28,16 @@ public class AlarmThread extends Thread {
 		try {
 			while (true) {
 				sem1.acquire();
-				System.out.println("test");
-				if (disp_time.getAlarmTime() == disp_time.getTime()) {
-					alarm = true;
-					disp_time.alarmOn(alarm);
-				}
-				if (disp_time.getAlarmTime()+20 == disp_time.getTime() && alarm == true) {
-					disp_time.alarmOn(false);
-				}
+				//System.out.println("test");
+				//if (disp_time.getAlarmTime() == disp_time.getTime()) {
+				//	alarm = true;
+				//	disp_time.alarmOn(alarm);
+				//}
+				//if (disp_time.getAlarmTime()+20 == disp_time.getTime() && alarm == true) {
+				//	disp_time.alarmOn(false);
+				//}
+				
+				//disp_time.checkAlarm();
 
 				//disp_time.setTime(h, m, s);
 			}

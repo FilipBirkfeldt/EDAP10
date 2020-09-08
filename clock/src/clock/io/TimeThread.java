@@ -19,29 +19,31 @@ public class TimeThread extends Thread {
 	@Override
 	public void run() {
 		try {
+			long filipsTid1 = System.currentTimeMillis();
 			while (true) {
-				long filipsTid1 = System.currentTimeMillis();
-				int time = disp_time.getTime();
-				int h = (time / 10000) % 24;
-				int m = ((time / 100) - (h * 100)) % 60;
-				int s = (((time) - (h * 10000) - (m * 100)) % 60)+1;
+				//int time = disp_time.getTime();
+				//int h = (time / 10000) % 24;
+				//int m = ((time / 100) - (h * 100)) % 60;
+				//int s = (((time) - (h * 10000) - (m * 100)) % 60)+1;
 
-				if (s > 59) {
-					s = 0;
-					m++;
-				}
-				if (m > 59) {
-					m = 0;
-					h++;
-				}
+				//if (s > 59) {
+				//	s = 0;
+				//	m++;
+				//}
+				//if (m > 59) {
+				//	m = 0;
+				//	h++;
+				//}
 
-				if (h > 23) {
-					h = 0;
-				}
-				disp_time.setTime(h, m, s);
+				//if (h > 23) {
+				//	h = 0;
+				//}
+				//disp_time.setTime(h, m, s);
 				
+				disp_time.tick();
+				disp_time.checkAlarm();
 				long Filipstid2 = System.currentTimeMillis();
-				Thread.sleep(997- (Filipstid2-filipsTid1));
+				Thread.sleep(1000- (Filipstid2-filipsTid1)%1000);
 				// från quiz  (1000-(now-t0)%1000)
 				sem1.release();
 			}

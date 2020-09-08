@@ -30,9 +30,9 @@ public class ClockMain {
 		MonitorThreadHandler disp_time = new MonitorThreadHandler(out);
 		Semaphore sem1 = new Semaphore(0);
 		TimeThread t1 = new TimeThread(disp_time, out, sem1);
-		AlarmThread t2 = new AlarmThread(disp_time, in, out, sem1);
+		//AlarmThread t2 = new AlarmThread(disp_time, in, out, sem1); // kan ta bort denna
 		t1.start();
-		t2.start();
+		//t2.start(); // bort
 
 		//
 
