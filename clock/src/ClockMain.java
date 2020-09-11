@@ -36,10 +36,13 @@ public class ClockMain {
 		boolean alarm = false;
 
 		// Tråd för att låta tiden rulla
-		MonitorThreadHandler disp_time = new MonitorThreadHandler(out);
-		//Semaphore sem1 = new Semaphore(0);
+		Semaphore sem1 = new Semaphore(0);
+		MonitorThreadHandler disp_time = new MonitorThreadHandler(out,sem1);
+		
 		TimeThread t1 = new TimeThread(disp_time);
+		//AlarmThread t2 = new AlarmThread(disp_time, sem1);
 		t1.start();
+		//t2.start();
 
 		// out.displayTime(15, 2, 37); // arbitrary time: just an example
 

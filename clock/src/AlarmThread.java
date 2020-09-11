@@ -6,20 +6,11 @@ import clock.io.MonitorThreadHandler;
 import clock.io.TimeThread;
 
 public class AlarmThread extends Thread {
-	private ClockInput in;
 	private MonitorThreadHandler disp_time;
-	private int h;
-	private int m;
-	private int s;
-	private int alarmTime; 
-	private ClockOutput out; 
 	private Semaphore sem1;
-	private boolean alarm;
 
-	public AlarmThread(MonitorThreadHandler disp_time, ClockInput in, ClockOutput out, Semaphore sem1) {
+	public AlarmThread(MonitorThreadHandler disp_time, Semaphore sem1) {
 		this.disp_time = disp_time;
-		this.in = in;
-		this.out = out; 
 		this.sem1 = sem1;
 	}
 

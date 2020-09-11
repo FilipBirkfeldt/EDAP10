@@ -6,6 +6,8 @@ public class MonitorThreadHandler {
 
 	private Semaphore mutex = new Semaphore(1); // Mutex - lås race condition //
 												// // kapplöpning
+	private Semaphore sem = new Semaphore(1);
+	private Semaphore sem1;
 	private int time;
 	private int alarmTime;
 	private int alarmTimeStop;
@@ -14,10 +16,11 @@ public class MonitorThreadHandler {
 	private int alarm_time;
 	private boolean alarmOn = false;
 
-	public MonitorThreadHandler(ClockOutput out) {
+	public MonitorThreadHandler(ClockOutput out, Semaphore sem1) {
 		this.out = out;
 		time = 0;
 		alarm = false;
+		this.sem1 = sem1;
 
 	}
 
@@ -28,13 +31,11 @@ public class MonitorThreadHandler {
 			out.displayTime(h, m, s);
 
 			if (alarmOn == true) {
-				if (alarmTimeStop == time) {
+				if (alarmTimeStop <= time) {
 					alarmOn = false;
 				}
 				out.alarm();
 			}
-
-			return;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
@@ -47,7 +48,6 @@ public class MonitorThreadHandler {
 			mutex.acquire();
 			alarmTime = h * 10000 + m * 100 + s;
 			alarmTimeStop = alarmTime + 20;
-			return;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
@@ -58,7 +58,6 @@ public class MonitorThreadHandler {
 	public void tick() {
 		try {
 			mutex.acquire();
-			System.out.println("test");
 			int h = (time / 10000) % 24;
 			int m = ((time / 100) - (h * 100)) % 60;
 			int s = (((time) - (h * 10000) - (m * 100)) % 60) + 1;
@@ -74,9 +73,11 @@ public class MonitorThreadHandler {
 			if (h > 23) {
 				h = 0;
 			}
+			//if (alarmOn){
+			//	sem1.release();
+			//}
 			mutex.release();
 			setTime(h, m, s);
-			return;
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -85,11 +86,13 @@ public class MonitorThreadHandler {
 
 	public void checkAlarm() {
 		try {
-			mutex.release();
+			mutex.acquire();
 			if (alarm==true && alarmTime == time) {
 				alarmOn = true;
 			}
-			return;
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} finally {
 			mutex.release();
 		}
@@ -102,7 +105,6 @@ public class MonitorThreadHandler {
 			if (alarmOn){
 				alarmOn = false;
 			}
-			return;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
