@@ -24,7 +24,6 @@ public class TrainObject extends Thread {
 	public void run() {
 
 		Segment first;
-		Segment last;
 
 		for (int i = 0; i < size; i++) {
 			first = trainRoute.next();
@@ -32,16 +31,15 @@ public class TrainObject extends Thread {
 			trainList.add(trainRoute);
 			first.enter();
 		}
-		synchronized (m1) {
-			while (true) {
-				try {
-					m1.run(trainList, segment, trainRoute);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		while (true) {
+			try {
+				m1.run(trainList, segment, trainRoute);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
+
 		}
+
 	}
 }

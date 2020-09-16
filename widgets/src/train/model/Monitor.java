@@ -14,25 +14,27 @@ public class Monitor {
 		this.busySet = new HashSet<Segment>();
 	}
 
-	public synchronized void run(LinkedList<Route> trainList, LinkedList<Segment> segment, Route trainRoute) throws InterruptedException {
+	public void run(LinkedList<Route> trainList, LinkedList<Segment> segment, Route trainRoute)
+			throws InterruptedException {
 		
-		Segment first;
-		first = trainRoute.next();
-		try {
-			checkFreeWay(first);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Segment first = trainRoute.next();
+
+		checkFreeWay(first);
+
 		trainList.add(0, trainRoute);
 		segment.add(0, first);
-		addSegmentToList(segment);
+
+		for (Segment x : segment) {
+			busySet.add(x);
+		}
+
 		first.enter();
+
 		trainList.removeLast();
-		removeSegmentInList(segment.getLast());
 		segment.getLast().exit();
-		segment.removeLast();
-		notifyAll(); 
+
+		removeSegmentInList(segment.removeLast());
+
 	}
 
 	public synchronized void addSegmentToList(LinkedList<Segment> lista) {
@@ -43,14 +45,23 @@ public class Monitor {
 
 	public synchronized void removeSegmentInList(Segment segment) {
 		busySet.remove(segment);
-		notifyAll();
+		notify();
 	}
 
-	public synchronized void checkFreeWay(Segment segment) throws InterruptedException {
+	public synchronized void checkFreeWay(Segment segment) {
 		// Kan både kolla & blockera
+
 		while (busySet.contains(segment)) {
-			wait();
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
+		busySet.add(segment);
+
 		return;
 	}
 }
