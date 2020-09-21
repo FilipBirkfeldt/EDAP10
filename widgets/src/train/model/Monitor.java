@@ -45,7 +45,7 @@ public class Monitor {
 
 	public synchronized void removeSegmentInList(Segment segment) {
 		busySet.remove(segment);
-		notify();
+		notifyAll();
 	}
 
 	public synchronized void checkFreeWay(Segment segment) {
