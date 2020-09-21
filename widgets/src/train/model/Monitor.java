@@ -16,7 +16,7 @@ public class Monitor {
 
 	public void run(LinkedList<Route> trainList, LinkedList<Segment> segment, Route trainRoute)
 			throws InterruptedException {
-		
+
 		Segment first = trainRoute.next();
 
 		checkFreeWay(first);
