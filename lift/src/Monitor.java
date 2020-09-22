@@ -53,7 +53,9 @@ public class Monitor {
 
 		view.openDoors(floor);
 		notifyAll();
-		while ((waitEntry.contains(floor) || waitExit.contains(floor)) && waitExit.size()<4) {
+		// !(a && b) == (!a || !b) !(a || b) == (!a && !b)
+					// Detta måste kollas									//
+		while ((waitEntry.contains(floor) || waitExit.contains(floor)) && waitExit.size()<4 ) {
 			wait();
 		}
 
