@@ -14,7 +14,6 @@ public class LiftThread extends Thread {
 		this.from = 0;
 
 	}
-	
 
 	@Override
 	public void run() {
@@ -22,10 +21,10 @@ public class LiftThread extends Thread {
 
 			try {
 				to = mon.runElevator(view, to, from);
-				view.moveLift(from, to);
-				from = to; 
-				
-				
+				if (to != from) {
+					view.moveLift(from, to);
+				}
+				from = to;
 
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

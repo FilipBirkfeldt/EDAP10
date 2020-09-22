@@ -15,6 +15,9 @@ public class Monitor {
 											// waiting to leave
 	// at the various floors
 	private int load; // number of passengers currently in the lift
+
+	private int walkin;
+
 	private LiftView view;
 
 	public Monitor() {
@@ -24,45 +27,75 @@ public class Monitor {
 	}
 
 	public synchronized void runPassenger(int fromFloor, int toFloor, Passenger pass) throws InterruptedException {
-		waitEntry.add(fromFloor);
-		while ((fromFloor != floor || waitExit.size() > 3) || moving) {
-			wait();
+		if (fromFloor != -1) {
+			waitEntry.add(fromFloor);
+		}
+		if (waitEntry.contains(fromFloor)) {
+			while ((fromFloor != floor || waitExit.size() > 4) || moving) {
+				wait();
+				System.out.println("fel1 kuk ");
+			}
 		}
 
-		pass.enterLift();
-		notifyAll();
-		waitEntry.remove(waitEntry.indexOf(fromFloor));
-		waitExit.add(toFloor);
-		while (toFloor != floor) {
-			wait();
+		if (waitExit.contains(toFloor)) {
+			while ((toFloor != floor || waitExit.size() > 4) || moving) {
+				wait();
+				System.out.println("fel22 kuk ");
+			}
 		}
-		pass.exitLift();
-		notifyAll();
-		waitExit.remove(waitExit.indexOf(toFloor));
+		// enterElevator(1);
+		// pass.enterLift();
+
+		// notifyAll();
+
+		// waitExit.add(toFloor);
+		// while (toFloor != floor) {
+		// wait();
+		// }
+
+		// pass.exitLift();
+
+		// notifyAll();
+		// waitExit.remove(waitExit.indexOf(toFloor));
 
 	}
 
 	public synchronized int runElevator(LiftView view, int to, int from) throws InterruptedException {
-		moving = false; 
-		floor = from;
-		if (floor == 6) {
-			direction = -1;
-		} else if (floor == 0) {
-			direction = 1;
-		}
+		if (!waitEntry.isEmpty() || !waitExit.isEmpty()) {
+			moving = false;
+			floor = from;
+			if (floor == 6) {
+				direction = -1;
+			} else if (floor == 0) {
+				direction = 1;
+			}
+			if (waitEntry.contains(floor) || waitExit.contains(floor)) {
+				view.openDoors(floor);
+				notifyAll();
+				// !(a && b) == (!a || !b) !(a || b) == (!a && !b)
+				// Detta måste kollas //
+				while ((waitEntry.contains(floor) && waitExit.size() < 4) || waitExit.contains(floor)) {
+					wait();
+				}
 
-		view.openDoors(floor);
-		notifyAll();
-		// !(a && b) == (!a || !b) !(a || b) == (!a && !b)
-					// Detta måste kollas									//
-		while ((waitEntry.contains(floor) || waitExit.contains(floor)) && waitExit.size()<4 ) {
-			wait();
+				view.closeDoors();
+			}
+			to = to + direction;
+			moving = true;
 		}
-
-		view.closeDoors();
-		to = to + direction;
-		moving = true; 
 		return to;
+	}
+
+	public synchronized void enterElevator(int fromFloor, int toFloor) throws InterruptedException {
+		waitEntry.remove(waitEntry.indexOf(fromFloor));
+		waitExit.add(toFloor);
+		notifyAll();
+
+	}
+
+	public synchronized void exitElevator(int toFloor) throws InterruptedException {
+		waitExit.remove(waitExit.indexOf(toFloor));
+		notifyAll();
 
 	}
 }

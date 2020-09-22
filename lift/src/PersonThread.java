@@ -4,6 +4,7 @@ public class PersonThread extends Thread {
 	private Passenger pass;
 	private Monitor mon;
 
+
 	public PersonThread(Passenger pass, Monitor mon) {
 		this.pass = pass;
 		this.mon = mon;
@@ -11,21 +12,30 @@ public class PersonThread extends Thread {
 
 	@Override
 	public void run() {
-		
-		
-			int fromFloor = pass.getStartFloor();
-			int toFloor = pass.getDestinationFloor();
+
+		int fromFloor = pass.getStartFloor();
+		int toFloor = pass.getDestinationFloor();
+
+		pass.begin(); // walk in (from left)
+
+		try {
+			mon.runPassenger(fromFloor, -1, pass);
+			pass.enterLift();
+			mon.enterElevator(fromFloor,toFloor);
+			
+			mon.runPassenger(-1, toFloor, pass);
+			
+			pass.exitLift();
+			mon.exitElevator(toFloor);
 			
 
-			pass.begin(); // walk in (from left)
-			try {
-				mon.runPassenger(fromFloor, toFloor, pass);
-				
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			pass.end(); // walk out (to the right)
+		} catch (
+
+		InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
+		pass.end(); // walk out (to the right)
+	}
 }
