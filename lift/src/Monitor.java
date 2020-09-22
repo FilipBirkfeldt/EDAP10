@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 import lift.LiftView;
+import lift.Passenger;
 
 public class Monitor {
 	private int floor; // the floor the lift is currently on
@@ -17,74 +18,38 @@ public class Monitor {
 	private LiftView view;
 
 	public Monitor() {
-		this.view = view;
 		this.waitEntry = new ArrayList<Integer>();
 		this.waitExit = new ArrayList<Integer>();
-		this.floor = 0;
+		this.direction = 1;
 	}
 
-	public synchronized void addWaitingPers(int waitFloor) {
-		waitEntry.add(waitFloor);
-		notifyAll();
-
-	}
-	
-	public synchronized void removeWaitingPers(int waitFloor) throws InterruptedException {
-		while(!moving){
+	public synchronized void runPassenger(int fromFloor, int toFloor, Passenger pass) throws InterruptedException {
+		waitEntry.add(fromFloor);
+		while (fromFloor != floor) {
 			wait();
 		}
-		waitEntry.remove(waitEntry.indexOf(waitFloor));
-		notifyAll();
-
-	}
-
-	public synchronized void addLiftPers(int toFloor) {
 		waitExit.add(toFloor);
 		notifyAll();
+
 	}
 
-	public synchronized boolean isEmpty() {
-		if (waitEntry.isEmpty() && waitExit.isEmpty()) {
-			return true;
+	public synchronized int runElevator(LiftView view, int to, int from) throws InterruptedException {
+
+		floor = from;
+		if (floor == 6) {
+			direction = -1;
+		} else if (floor == 0) {
+			direction = 1;
 		}
-		return false;
-	}
 
-	public synchronized int getLiftFloor() {
-		return floor;
-	}
-
-	public synchronized void setLiftFloor(int i) {
-		this.floor = i;
-		notifyAll();
-	}
-
-	public synchronized void checkFloor(int persOnFloor) throws InterruptedException {
-		while (this.floor != persOnFloor) {
-			wait();
-		}
-	}
-
-	public synchronized void waitForPers(int i) throws InterruptedException {
-		while (waitEntry.contains(i)) {
+		view.openDoors(floor);
+		while (waitEntry.contains(floor)) {
 			wait();
 		}
 
-	}
-
-	public synchronized void setDirecton(int i) {
-		if (i == 0) {
-			return;
-		}
-		direction = i;
-	}
-
-	public synchronized int getDirection() {
-		return direction;
-	}
+		view.closeDoors();
+		to = to+direction; 
+		return to; 
 	
-	public synchronized void setMoving(boolean moving) {
-		this.moving = moving;
 	}
-
 }

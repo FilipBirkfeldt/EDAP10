@@ -4,50 +4,34 @@ import lift.Passenger;
 public class LiftThread extends Thread {
 	private LiftView view;
 	private Monitor mon;
+	private int to;
+	private int from;
 
 	public LiftThread(LiftView view, Monitor mon) {
 		this.view = view;
 		this.mon = mon;
+		this.to = 0;
+		this.from = 0;
+
 	}
+	
 
 	@Override
 	public void run() {
-		try {
-
-		if (mon.isEmpty()) {
-			// wait();
-		}
-		int dir = 0;
 		while (true) {
-			int i = mon.getLiftFloor();
-			
-			if(i==0){
-				dir = 1;
-			}
-			else if(i==6){
-				dir = -1;
-			}
-			
-			mon.setDirecton(dir);
-			
-			view.openDoors(i);
-			mon.setMoving(false);
-			
-			mon.waitForPers(i);
 
-			view.closeDoors();
-		
-			view.moveLift(i, i + mon.getDirection());
-			mon.setMoving(true);
-			
-			i = i + mon.getDirection();
-			
-			mon.setLiftFloor(i);
+			try {
+				to = mon.runElevator(view, to, from);
+				view.moveLift(from, to);
+				from = to; 
+				
+				
 
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 	}
 }

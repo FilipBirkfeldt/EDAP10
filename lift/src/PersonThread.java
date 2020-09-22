@@ -11,29 +11,20 @@ public class PersonThread extends Thread {
 
 	@Override
 	public void run() {
-		try {
+		
+		
 			int fromFloor = pass.getStartFloor();
 			int toFloor = pass.getDestinationFloor();
+			
 
 			pass.begin(); // walk in (from left)
-
-			mon.addWaitingPers(fromFloor);
-
-			mon.checkFloor(fromFloor);
+			try {
+				mon.runPassenger(fromFloor, toFloor, pass);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
-			pass.enterLift(); // step inside
-			
-			mon.addLiftPers(toFloor);
-			mon.removeWaitingPers(fromFloor);
-			
-			mon.checkFloor(toFloor);
-			
-			pass.exitLift(); // leave lift
 			pass.end(); // walk out (to the right)
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-
-	}
 }
