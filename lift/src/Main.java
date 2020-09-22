@@ -13,12 +13,12 @@ public class Main {
 		LiftThread lift = new LiftThread(view, mon);
 		lift.start();
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 40; i++) {
 			
 			Passenger pass = view.createPassenger();
 			PersonThread pers = new PersonThread(pass, mon);
 			pers.start();
-			Thread.sleep(rand.nextInt(8000));
+			Thread.sleep(rand.nextInt(2000));
 		}
 
 	}

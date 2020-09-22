@@ -20,6 +20,7 @@ public class PersonThread extends Thread {
 			pass.begin(); // walk in (from left)
 			try {
 				mon.runPassenger(fromFloor, toFloor, pass);
+				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

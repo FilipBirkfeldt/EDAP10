@@ -25,16 +25,25 @@ public class Monitor {
 
 	public synchronized void runPassenger(int fromFloor, int toFloor, Passenger pass) throws InterruptedException {
 		waitEntry.add(fromFloor);
-		while (fromFloor != floor) {
+		while ((fromFloor != floor || waitExit.size() > 3) || moving) {
 			wait();
 		}
-		waitExit.add(toFloor);
+
+		pass.enterLift();
 		notifyAll();
+		waitEntry.remove(waitEntry.indexOf(fromFloor));
+		waitExit.add(toFloor);
+		while (toFloor != floor) {
+			wait();
+		}
+		pass.exitLift();
+		notifyAll();
+		waitExit.remove(waitExit.indexOf(toFloor));
 
 	}
 
 	public synchronized int runElevator(LiftView view, int to, int from) throws InterruptedException {
-
+		moving = false; 
 		floor = from;
 		if (floor == 6) {
 			direction = -1;
@@ -43,13 +52,15 @@ public class Monitor {
 		}
 
 		view.openDoors(floor);
-		while (waitEntry.contains(floor)) {
+		notifyAll();
+		while ((waitEntry.contains(floor) || waitExit.contains(floor)) && waitExit.size()<4) {
 			wait();
 		}
 
 		view.closeDoors();
-		to = to+direction; 
-		return to; 
-	
+		to = to + direction;
+		moving = true; 
+		return to;
+
 	}
 }
