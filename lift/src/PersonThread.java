@@ -4,7 +4,6 @@ public class PersonThread extends Thread {
 	private Passenger pass;
 	private Monitor mon;
 
-
 	public PersonThread(Passenger pass, Monitor mon) {
 		this.pass = pass;
 		this.mon = mon;
@@ -19,15 +18,15 @@ public class PersonThread extends Thread {
 		pass.begin(); // walk in (from left)
 
 		try {
-			mon.runPassenger(fromFloor, -1, pass);
+			mon.passEnter(fromFloor, toFloor);
+			
 			pass.enterLift();
-			mon.enterElevator(fromFloor,toFloor);
-			
-			mon.runPassenger(-1, toFloor, pass);
-			
+			mon.enterElevator(fromFloor, toFloor);
+
+			mon.passExit(toFloor);
+
 			pass.exitLift();
 			mon.exitElevator(toFloor);
-			
 
 		} catch (
 

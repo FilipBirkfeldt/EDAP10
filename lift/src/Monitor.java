@@ -26,41 +26,39 @@ public class Monitor {
 		this.direction = 1;
 	}
 
-	public synchronized void runPassenger(int fromFloor, int toFloor, Passenger pass) throws InterruptedException {
-		if (fromFloor != -1) {
-			waitEntry.add(fromFloor);
+	public synchronized void passExit(int toFloor) throws InterruptedException {
+		while (toFloor != floor || moving) {
+			wait();
 		}
-		if (waitEntry.contains(fromFloor)) {
-			while ((fromFloor != floor || waitExit.size() > 4) || moving) {
-				wait();
-				System.out.println("fel1 kuk ");
-			}
+		walkin--; 
+	}
+
+	public synchronized void passEnter(int fromFloor, int toFloor) throws InterruptedException {
+		waitEntry.add(fromFloor);
+		while ((fromFloor != floor || waitExit.size() + walkin > 3) || moving) {
+			wait();
+			System.out.println("rad 39 " +waitExit.size()+" " + walkin);
 		}
+		walkin++;
+		notifyAll(); 
+	}
 
-		if (waitExit.contains(toFloor)) {
-			while ((toFloor != floor || waitExit.size() > 4) || moving) {
-				wait();
-				System.out.println("fel22 kuk ");
-			}
-		}
-		// enterElevator(1);
-		// pass.enterLift();
+	public synchronized void enterElevator(int fromFloor, int toFloor) throws InterruptedException {
+		// kolla hur många platser som finns tillgänliga - om fullt stäng ute
+		walkin--; 
+		waitExit.add(toFloor);
+		waitEntry.remove(waitEntry.indexOf(fromFloor));
+		notifyAll();
+	}
 
-		// notifyAll();
-
-		// waitExit.add(toFloor);
-		// while (toFloor != floor) {
-		// wait();
-		// }
-
-		// pass.exitLift();
-
-		// notifyAll();
-		// waitExit.remove(waitExit.indexOf(toFloor));
-
+	public synchronized void exitElevator(int toFloor) throws InterruptedException {
+		waitExit.remove(waitExit.indexOf(toFloor));
+		walkin++;
+		notifyAll();
 	}
 
 	public synchronized int runElevator(LiftView view, int to, int from) throws InterruptedException {
+		walkin = 0;
 		if (!waitEntry.isEmpty() || !waitExit.isEmpty()) {
 			moving = false;
 			floor = from;
@@ -86,16 +84,4 @@ public class Monitor {
 		return to;
 	}
 
-	public synchronized void enterElevator(int fromFloor, int toFloor) throws InterruptedException {
-		waitEntry.remove(waitEntry.indexOf(fromFloor));
-		waitExit.add(toFloor);
-		notifyAll();
-
-	}
-
-	public synchronized void exitElevator(int toFloor) throws InterruptedException {
-		waitExit.remove(waitExit.indexOf(toFloor));
-		notifyAll();
-
-	}
 }
