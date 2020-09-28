@@ -1,4 +1,6 @@
 import java.math.BigInteger;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -26,6 +28,7 @@ public class CodeBreaker implements SnifferCallback {
         workList        = w.getWorkList();
         progressList    = w.getProgressList();
         mainProgressBar = w.getProgressBar();
+        ExecutorService pool = Executors.newFixedThreadPool(2);
  
     }
     
@@ -66,15 +69,15 @@ public class CodeBreaker implements SnifferCallback {
     		workList.remove(b);
     		progressList.add(work);
     		
+    		
+    		ProgressTracker tracker = new Tracker();
+    	    try {
+				String plaintext = Factorizer.crack(message, n, tracker);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
     	});
-    	
-    	ProgressTracker tracker = new Tracker();
-	    try {
-			String plaintext = Factorizer.crack(message, n, tracker);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
     	
         System.out.println("message intercepted (N=" + n + ")...");
     }
