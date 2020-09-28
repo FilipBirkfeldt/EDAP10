@@ -44,6 +44,7 @@ public class ProgressItem extends ConvenientPanel {
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         textArea.setEditable(false);
+       
         main.add(textArea, BorderLayout.CENTER);
 
         progressBar = new JProgressBar();

@@ -60,7 +60,8 @@ public class Factorizer {
 
         BigInteger p = primeFactors.get(0);
         BigInteger q = primeFactors.get(1);
-
+        
+        
         return new RSA(p, q).decrypt(code);
     }
 
