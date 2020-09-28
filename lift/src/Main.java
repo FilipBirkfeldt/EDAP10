@@ -18,6 +18,7 @@ public class Main {
 			Passenger pass = view.createPassenger();
 			PersonThread pers = new PersonThread(pass, mon);
 			pers.start();
+			
 			Thread.sleep(rand.nextInt(2000));
 		}
 
