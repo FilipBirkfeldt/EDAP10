@@ -133,7 +133,7 @@ public class CodeBreaker implements SnifferCallback {
 			
 			
 			
-			System.out.print("RUNK_1);
+			System.out.print("RÖNK_1");
 
 		}
 	}
