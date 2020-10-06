@@ -37,7 +37,6 @@ public class Wash {
             System.out.println("user selected program " + n);
             
             if (n==1) {
-            	System.out.println("ettan"); 
             	wp1 = new WashingProgram1(io, temp, water, spin);
             	wp1.start(); 
             }

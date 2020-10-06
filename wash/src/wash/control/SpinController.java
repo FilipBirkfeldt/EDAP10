@@ -10,6 +10,7 @@ public class SpinController extends ActorThread<WashingMessage> {
 
 	public SpinController(WashingIO io) {
 		this.io = io;
+
 	}
 
 	@Override
@@ -19,30 +20,48 @@ public class SpinController extends ActorThread<WashingMessage> {
 			// ... TODO ...
 
 			while (true) {
-				// wait for up to a (simulated) minute for a WashingMessage
 				WashingMessage m = receiveWithTimeout(60000 / Settings.SPEEDUP);
-				System.out.println("m"); 
-				if (m.getCommand() == WashingMessage.SPIN_SLOW) {
-					System.out.println("spinCont if "); 
-					int i = 0; 
-					while (i<5) {
-						System.out.println("spinCont"); 
-						
-						io.setSpinMode(io.SPIN_LEFT);
-						Thread.sleep(60000);
-						io.setSpinMode(io.SPIN_RIGHT);
-						Thread.sleep(60000); 
-						i++; 
-					}
-				}
-				// if m is null, it means a minute passed and no message was received
+
 				if (m != null) {
+
 					System.out.println("got " + m);
+					// wait for up to a (simulated) minute for a WashingMessage
+					if (m.getCommand() == WashingMessage.SPIN_SLOW) {
+						WashingMessage m2 = new WashingMessage(this, WashingMessage.ACKNOWLEDGMENT, 0);
+
+						while (m.getCommand() == WashingMessage.SPIN_SLOW) {
+
+							io.setSpinMode(io.SPIN_LEFT);
+							Thread.sleep(1000);
+							io.setSpinMode(io.SPIN_RIGHT);
+							Thread.sleep(1000);
+							m.getSender().send(m2);
+						}
+						m = receive();
+					}
+					// if m is null, it means a minute passed and no message was received
+
+					if (m.getCommand() == WashingMessage.SPIN_FAST) {
+						io.setSpinMode(io.SPIN_FAST);
+						WashingMessage m2 = new WashingMessage(this, WashingMessage.ACKNOWLEDGMENT, 0);
+						m.getSender().send(m2);
+					}
+					m = receive();
+
+					if (m.getCommand() == WashingMessage.SPIN_OFF) {
+						io.setSpinMode(io.SPIN_IDLE);
+						WashingMessage m2 = new WashingMessage(this, WashingMessage.ACKNOWLEDGMENT, 0);
+						m.getSender().send(m2);
+					}
+					m = receive();
+
 				}
 
 				// ... TODO ...
 			}
-		} catch (InterruptedException unexpected) {
+		} catch (
+
+		InterruptedException unexpected) {
 			// we don't expect this thread to be interrupted,
 			// so throw an error if it happens anyway
 			throw new Error(unexpected);

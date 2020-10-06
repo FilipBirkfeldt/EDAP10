@@ -30,6 +30,16 @@ public class WashingProgram1 extends ActorThread<WashingMessage> {
 	@Override
 	public void run() {
 		try {
+
+			// låser
+			io.lock(true);
+			
+			
+			water.send(new WashingMessage(this, WashingMessage.WATER_FILL, 10));
+			
+
+			temp.send(new WashingMessage(this, WashingMessage.TEMP_SET, 40));
+
 			// Instruct SpinController to rotate barrel slowly, back and forth // Expect an
 			System.out.println("I WP1");
 			// acknowledgment in response. System.out.println("setting SPIN_SLOW...");
@@ -43,6 +53,7 @@ public class WashingProgram1 extends ActorThread<WashingMessage> {
 			// Instruct SpinController to stop spin barrel spin.
 			// Expect an acknowledgment in response. System.out.println("setting
 			// SPIN_OFF...");
+
 			spin.send(new WashingMessage(this, WashingMessage.SPIN_OFF));
 			WashingMessage ack2 = receive();
 			System.out.println("washing program 1 got " + ack2);
