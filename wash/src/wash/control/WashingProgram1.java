@@ -88,7 +88,7 @@ public class WashingProgram1 extends ActorThread<WashingMessage> {
 				water.send(new WashingMessage(this, WashingMessage.WATER_DRAIN));
 				WashingMessage ack10 = receive();
 			}
-			water.send(new WashingMessage(this, WashingMessage.WATER_IDLE));
+			// water.send(new WashingMessage(this, WashingMessage.WATER_IDLE));
 			io.drain(true);
 			spin.send(new WashingMessage(this, WashingMessage.SPIN_FAST));
 			WashingMessage ack15 = receive();

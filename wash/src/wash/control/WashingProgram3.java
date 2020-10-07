@@ -39,14 +39,14 @@ public class WashingProgram3 extends ActorThread<WashingMessage> {
             temp.send(new WashingMessage(this, WashingMessage.TEMP_IDLE));
             
             // Wait for temperature controller to acknowledge 
-            WashingMessage ack1 = receive();
-            System.out.println("got " + ack1);
+            //WashingMessage ack1 = receive();
+            //System.out.println("got " + ack1);
 
             // Drain barrel, which may take some time. To ensure the barrel
             // is drained before we continue, an acknowledgment is required.
             water.send(new WashingMessage(this, WashingMessage.WATER_DRAIN));
             WashingMessage ack2 = receive();  // wait for acknowledgment
-            System.out.println("got " + ack2);
+            System.out.println("got _____ " + ack2);
 
             // Now that the barrel is drained, we can turn off water regulation.
             // For the WATER_IDLE order, the water level regulator will not send

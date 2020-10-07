@@ -29,9 +29,11 @@ public class SpinController extends ActorThread<WashingMessage> {
 				WashingMessage n = receiveWithTimeout(60000 / Settings.SPEEDUP);
 
 				if (n != null) {
+
 					m = n;
-					if ((m.getCommand() == WashingMessage.SPIN_SLOW || m.getCommand() == WashingMessage.SPIN_FAST) && enGang==0) {
-						
+					if ((m.getCommand() == WashingMessage.SPIN_SLOW || m.getCommand() == WashingMessage.SPIN_FAST)
+							&& enGang == 0) {
+
 						System.out.println("SPIN skickar");
 						enGang++;
 						m.getSender().send(m2);
@@ -52,21 +54,20 @@ public class SpinController extends ActorThread<WashingMessage> {
 					// received
 
 					if (m.getCommand() == WashingMessage.SPIN_FAST) {
-						enGang1 = 0;
 						io.setSpinMode(io.SPIN_FAST);
-
+						enGang1 = 0;
 					}
 
 					if (m.getCommand() == WashingMessage.SPIN_OFF) {
-						enGang=0;
+						enGang = 0;
 						io.setSpinMode(io.SPIN_IDLE);
-						
-						if (enGang1==0){
+
+						if (enGang1 == 0) {
 							m.getSender().send(m2);
 							System.out.println("SPINOFF skickar");
 							enGang1++;
 						}
-						
+
 					}
 
 				}
