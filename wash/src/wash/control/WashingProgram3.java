@@ -52,6 +52,8 @@ public class WashingProgram3 extends ActorThread<WashingMessage> {
             // For the WATER_IDLE order, the water level regulator will not send
             // any acknowledgment.
             water.send(new WashingMessage(this, WashingMessage.WATER_IDLE));
+            
+            
 
             // Switch off spin. We expect an acknowledgment, to ensure
             // the hatch isn't opened while the barrel is spinning.
