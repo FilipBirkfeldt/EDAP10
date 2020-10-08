@@ -13,6 +13,7 @@ public class WaterController extends ActorThread<WashingMessage> {
 	private boolean fill = false;
 	private WashingMessage m2;
 	private int checkOne = 0;
+	private SafetyController sC = new SafetyController(io); 
 
 	public WaterController(WashingIO io) {
 		this.io = io;

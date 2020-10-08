@@ -43,7 +43,8 @@ public class TemperatureController extends ActorThread<WashingMessage> {
 						double currTemp = io.getTemperature();
 						double waterLevel = io.getWaterLevel();
 						// System.out.println(currTemp + "Current heat");
-						if (currTemp < (reqTemp - 2 + 0.2 * (currTemp - 20) * Math.pow(2.38, -4)) && !heat) {
+						if (currTemp < (reqTemp - 2 + 0.2 * (currTemp - 20) * Math.pow(2.38, -4)) && !heat
+								&& io.getWaterLevel() > 0) {
 							// System.out.println(currTemp + "heat true");
 							io.heat(true);
 							heat = true;

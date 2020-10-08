@@ -14,12 +14,12 @@ import wash.io.WashingIO;
  */
 public class WashingProgram3 extends ActorThread<WashingMessage> {
 
-    private WashingIO io;
+    private SafetyController io;
     private ActorThread<WashingMessage> temp;
     private ActorThread<WashingMessage> water;
     private ActorThread<WashingMessage> spin;
     
-    public WashingProgram3(WashingIO io,
+    public WashingProgram3(SafetyController io,
                            ActorThread<WashingMessage> temp,
                            ActorThread<WashingMessage> water,
                            ActorThread<WashingMessage> spin) 
